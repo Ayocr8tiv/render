@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
+import { addToCart } from "../redux/slices/CartSlices";
+import { useDispatch } from "react-redux";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchSingleProduct = async () => {
@@ -32,7 +37,7 @@ const ProductDetail = () => {
   if (!product) return <p>Product not found</p>;
 
   const FLUTTER_PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY
-  
+
 
   const config = {
     public_key: FLUTTER_PUBLIC_KEY,
@@ -77,19 +82,14 @@ const ProductDetail = () => {
         <p className="text-lg text-gray-600 mt-2 w-[750px] mb-8"><strong>Description:</strong> {product.description}</p>
 
         <p className="text-gray-800 mt-4 font-bold"><strong>Price:</strong> ${product.price}</p>
-        <FlutterWaveButton className="mt-6 bg-red-600 text-white py-3 px-4 rounded-xl hover:bg-red-700 transition duration-300" {...fwConfig} />
-        {/* <div>
-          <button className="mt-6 bg-red-600 text-white py-3 px-4 rounded-xl hover:bg-red-700 transition duration-300">Add to Cart</button>
-        </div> */}
+        <FlutterWaveButton className="mt-6 bg-red-600 text-white py-3 px-4 w-40 rounded-xl hover:bg-red-700 transition duration-300" {...fwConfig} />
+
+        <div>
+          <button onClick={() => { dispatch(addToCart(product)) }} className="mt-6 border text-gray-800 py-3 px-4 h-12 rounded-xl
+           hover:border-red-500 transition duration-300 relative bottom-18 left-48">Add to Cart</button>
+        </div>
 
       </div>
-
-
-
-
-
-
-
     </div>
   );
 };
