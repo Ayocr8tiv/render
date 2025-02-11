@@ -43,7 +43,7 @@ const ProductDetail = () => {
     public_key: FLUTTER_PUBLIC_KEY,
     tx_ref: Date.now(),
     amount: product.price,
-    currency: 'USD',
+    currency: 'NGN',
     payment_options: 'card,mobilemoney,ussd',
     customer: {
       email: 'user@gmail.com',
