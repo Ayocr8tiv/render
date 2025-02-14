@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const Products = () => {
   const [product, setProduct] = useState([]);
   const [filterProduct, setFilterProduct] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState('')
  
   const navigate = useNavigate();
 
@@ -45,11 +45,12 @@ const Products = () => {
     <div className='container mx-auto p-6 ' >
 
       <div>
-      <input type="text" placeholder='Search products...'
-      className='relative left-[500px] bottom-26 px-4  border py-2 rounded-md'
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      />
+        <input type="text"
+          placeholder='Search products...'
+          className='relative left-[500px] bottom-26 px-4  border py-2 rounded-md'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
       <select
