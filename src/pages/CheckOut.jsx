@@ -1,13 +1,14 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
+import { removeFromCart } from "../redux/slices/CartSlices";
 
 const CheckOut = () => {
+    const dispatch = useDispatch(); 
     const cartItems = useSelector((state) => state.cart.cartItem);
 
     const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
-
 
     const FLUTTER_PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
 
@@ -36,7 +37,11 @@ const CheckOut = () => {
             console.log(response);
             closePaymentModal();
         },
-        onClose: () => { },
+        onClose: () => {},
+    };
+
+    const handleRemove = (id) => {
+        dispatch(removeFromCart(id));
     };
 
     return (
@@ -48,8 +53,8 @@ const CheckOut = () => {
             ) : (
                 <div>
                     <ul className="divide-y divide-gray-300">
-                        {cartItems.map((item, index) => (
-                            <li key={index} className="flex justify-between items-center py-4">
+                        {cartItems.map((item) => (
+                            <li key={item.id} className="flex justify-between items-center py-4">
                                 <div className="flex items-center space-x-4">
                                     <img src={item.image} alt={item.title} className="w-16 h-16 object-cover rounded-md" />
                                     <div>
@@ -58,9 +63,21 @@ const CheckOut = () => {
                                         <p className="text-sm text-gray-500">Quantity: {item.quantity || 1}</p>
                                     </div>
                                 </div>
-                                <p className="font-semibold text-lg">${(item.price * (item.quantity || 1)).toFixed(2)}</p>
+
+                                <div className="flex items-center space-x-4">
+                                    <p className="font-semibold text-lg">${(item.price * (item.quantity || 1)).toFixed(2)}</p>
+
+                                    <button
+                                        onClick={() => handleRemove(item.id)}
+                                        className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+
                             </li>
                         ))}
+
                     </ul>
 
                     <div className="mt-6 border-t pt-4">
@@ -70,12 +87,8 @@ const CheckOut = () => {
                         </h3>
                     </div>
 
-
-
-
-
                     <FlutterWaveButton
-                        className="w-full bg-blue-500 text-white py-3 mt-6 rounded-md text-lg font-semibold hover:bg-blue-600"
+                        className="w-full bg-blue-500 text-white py-3 mt-6 rounded-md text-lg font-semibold hover:bg-blue-600 cursor-pointer"
                         {...fwConfig}
                     />
 
